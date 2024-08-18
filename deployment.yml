@@ -1,0 +1,60 @@
+template: k8s-service
+organization: core
+deploymentType: kubernetes
+
+serviceConfig:
+  id: notification
+  group: services
+  terminationDelay: 30
+  targetPort: 80
+  containers:
+    - name: notification-service
+      image: core/notification-service
+      fromDockerFile: 'Dockerfile'
+      containerPorts:
+        - 80
+      env:
+        PORT: '80'
+        SENDGRID_API_KEY: 'ssm:/services/__ENV__/core/notification/sendgridApiKey'
+        DEFAULT_SENDER_EMAIL: 'ssm:/services/__ENV__/core/notification/mailSenderEmail'
+        SECURITY_PUBLIC_KEY: 'ssm:/services/__ENV__/core/authentication/signer-publicKey'
+        FIREBASE_SECURITY_KEYS: 'ssm:/services/__ENV__/core/notification/firebaseServiceCredential'
+        PUBLIC_VAPID_KEY: 'ssm:/services/__ENV__/core/notification/vapidPublicKey'
+        PRIVATE_VAPID_KEY: 'ssm:/services/__ENV__/core/notification/vapidPrivateKey'
+        FIREBASE_PROJECT_ID: 'config:core-notification:firebaseProjectId'
+        WEB_PUSH_DOMAIN_EMAIL: 'config:core-notification:webPushDomainEmail'
+        DEFAULT_SENDER_NAME: 'config:core-notification:mailSenderName'
+        SECURITY_SCOPE_NAMESPACE: 'config:core-notification:scopeNamespace'
+
+      healthCheck:
+        httpPath: /health
+        initialDelaySeconds: 10
+
+
+resources:
+  databases:
+    - name: notification
+      type: MONGO_DB
+      access: ReadWrite
+      environmentMap:
+        uri: DB_CONNECTION_URL
+
+    - name: notification
+      type: REDIS
+      environmentMap:
+        uri: REDIS_URL
+
+  authentication:
+    description: 'Authentication Credential for Notification Service'
+    environmentMap:
+      authId: SERVICE_AUTH_ID
+      authSecret: SERVICE_AUTH_SECRET
+    scopes: []
+
+config:
+  name: core-notification
+  map:
+    scopeNamespace: notification
+    firebaseProjectId: perksforustaging
+    webPushDomainEmail: 'mailto:tech@perksforung.com'
+    mailSenderName: 'Perks For U'

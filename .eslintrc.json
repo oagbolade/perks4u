@@ -1,0 +1,7 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "@perksforu/eslint-config",
+    "plugin:prettier/recommended"
+  ]
+}

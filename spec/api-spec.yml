@@ -1,0 +1,855 @@
+openapi: 3.0.0
+info:
+  title: "Notification Service"
+  description: "This service provides endpoints for all notification related interactions."
+  version: 1.0.0
+  contact:
+    name: "PerksForU Team"
+    email: "tech@perksforung.com"
+
+x-api-visibility: private
+x-service-group: core
+x-service-id: notification
+
+servers:
+  - description: Staging Ingress
+    url: http://notification.core
+
+security:
+  - authToken: [ ]
+
+
+paths:
+  /email/notify:
+    post:
+      summary: "Sends an Email Notification"
+      description: "Send an email nitification to one recipient"
+      operationId: emailNotify
+      tags:
+        - "Notification"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendEmailRequest"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotificationResponse"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "default":
+          $ref: "#/components/responses/ServerError"
+
+  /email/notify-many:
+    post:
+      summary: "Sends Emails Notification to Multiple Recipients"
+      description: "Send an email nitification to multiple recipient"
+      operationId: emailNotifyMany
+      tags:
+        - "Notification"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendManyEmailRequest"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotificationResponse"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "default":
+          $ref: "#/components/responses/ServerError"
+  
+  /email/{requestId}/status:
+    get:
+      summary: "Checks email notification status"
+      description: "Checks the status of an email notification"
+      operationId: checkEmailNotificationStatus
+      parameters:
+        - in: path
+          name: requestId
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - "Notification"
+      responses:
+        "200":
+          $ref: "#/components/responses/NotificationStatusResponse"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "default":
+          $ref: "#/components/responses/ServerError"
+    
+  /sms/notify:
+    post:
+      summary: "Send SMS Notification"
+      description: "Route to send an SMS notification"
+      operationId: smsNotify
+      tags:
+        - "Notification"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendSMSRequest"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotificationResponse"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "default":
+          $ref: "#/components/responses/ServerError"
+  
+  /sms/{requestId}/status:
+    get:
+      summary: "Checks sms notification status"
+      description: "Checks the status of an sms notification"
+      operationId: checkSmsNotificationStatus
+      parameters:
+        - in: path
+          name: requestId
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - "Notification"
+      responses:
+        "200":
+          $ref: "#/components/responses/NotificationStatusResponse"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "default":
+          $ref: "#/components/responses/ServerError"
+
+  /web-push/register:
+    post:
+      summary: "Register device"
+      description: "Registers a device for web push notification"
+      operationId: registerWebPush
+      tags:
+        - "Notification"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WebPushRegisterDeviceRequest"
+      responses:
+        "201":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WebPushRegisterDeviceResponse"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "default":
+          $ref: "#/components/responses/ServerError"
+
+  /web-push/unregister:
+    post:
+      summary: "Unregister device"
+      description: "Unregisters a device from web push notifications"
+      operationId: unregisterWebPush
+      tags:
+        - "Notification"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WebPushUnregisterDeviceRequest"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WebPushRegisterDeviceResponse"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "default":
+          $ref: "#/components/responses/ServerError"
+
+  /web-push/notify:
+    post:
+      summary: "Web Push"
+      description: "Send push notification to user's browser"
+      operationId: webPushNotify
+      tags:
+        - "Notification"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WebPushRequest"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WebPushResponse"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "default":
+          $ref: "#/components/responses/ServerError"
+
+  /app-push/register:
+    post:
+      summary: "Register device"
+      description: "Registers a device for push notification"
+      operationId: registerDevice
+      tags:
+        - "Notification"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterDeviceRequest"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisterDeviceResponse"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "default":
+          $ref: "#/components/responses/ServerError"
+  
+  /app-push/unregister:
+    post:
+      summary: "Unregister device"
+      description: "Unregisters a device from push notifications"
+      operationId: unregisterDevice
+      tags:
+        - "Notification"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UnregisterDeviceRequest"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisterDeviceResponse"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "default":
+          $ref: "#/components/responses/ServerError"
+
+  /app-push/notify:
+    post:
+      summary: "Send Push Notification"
+      description: "Route to send push notification to user via the device token"
+      operationId: pushNotify
+      tags:
+        - "Notification"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendPushRequest"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotificationResponse"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "default":
+          $ref: "#/components/responses/ServerError"
+
+  /app-push/{requestId}/status:
+    get:
+      summary: "Checks push notification status"
+      description: "Checks the status of a push notification"
+      operationId: checkPushsNotificationStatus
+      parameters:
+        - in: path
+          name: requestId
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - "Notification"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SendPushResponse"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "default":
+          $ref: "#/components/responses/ServerError"
+components:
+  schemas:
+    ErrorMessageDto:
+      description: "Default error object for services. This gives consistent error object that all services may use."
+      type: "object"
+      required:
+        - "code"
+        - "message"
+      properties:
+        code:
+          type: "string"
+          description: "Error code"
+          example: "UNKNOWN_ERROR"
+        message:
+          type: "string"
+          description: "Descriptive error message"
+          example: "Request could not be completed due to an error"
+        data:
+          type: "object"
+          description: "Additional data for this error message."
+          additionalProperties: true
+          properties: { }
+    
+    BaseEmailRequest:
+      type: "object"
+      description: "The request body to send email"
+      required:
+        - "subject"
+      properties:
+        subject:
+          type: "string"
+          description: "The subject of the email"
+        body:
+          type: "string"
+          description: "The body of the email"
+        sender:
+          type: "string"
+          description: "The email of the sender"
+        senderName:
+          type: "string"
+          description: Optional name of the sender
+        template: 
+          type: "string"
+          description: "id of the template to use if content is not provided"
+        templateData:
+          type: "object"
+          description: data for template replacements
+          properties: { }
+            # Determine the properties
+    
+    SendEmailRequest:
+      type: "object"
+      description: "Send email request data"
+      allOf:
+      - $ref: "#/components/schemas/BaseEmailRequest"
+      - type: "object"
+        required:
+          - "recipient"
+        properties:
+          recipient:
+            $ref: "#/components/schemas/EmailRecipient"
+      
+    SendManyEmailRequest:
+      type: "object"
+      description: "Send email request data"
+      allOf:
+      - $ref: "#/components/schemas/BaseEmailRequest"
+      - type: "object"
+        required:
+          - "recipients"
+        properties:
+          recipients:
+            type: "array"
+            description: "The data of the recipient"
+            items:
+              $ref: "#/components/schemas/EmailRecipient"
+
+    EmailRecipient:
+      type: "object"
+      description: "The data of the recipient"
+      required:
+        - "email"
+      properties:
+        email:
+          type: "string"
+        name:
+          type: "string"
+  
+    NotificationResponse:
+      type: "object"
+      description: "Send email response data"     
+      properties:
+        requestId:
+          type: "string"
+          format: "uuid"
+        status:
+          type: "boolean"
+
+
+    SendSMSRequest:
+      type: "object"
+      description: "The request body to send an SMS notification"
+      required:
+        - "message"
+        - "recipient"
+      properties:
+        message:
+          type: "string"
+          description: "The body of the sms"
+        sender:
+          type: "string"
+          description: "The one sending the sms"
+        recipient:
+          type: "string"
+
+    WebPushRequest:
+      type: "object"
+      description: "Send web push request data"
+      required:
+        - "accountId"
+        - "body"
+        - "title"
+      properties: 
+        userId:
+          type: "string"
+          format: "uuid"
+        accountId:
+          type: "string"
+          format: "uuid"
+        body:
+          type: "string"
+        title:
+          type: "string"
+        subtitle:
+          type: "string"
+    
+    WebPushResponse:
+      type: "object"
+      description: "The request body to to register a device for notification"
+      properties:
+        accountId:
+          type: "string"
+          format: "uuid"
+        success:
+          type: "string"
+        body:
+          type: "string"
+        title:
+          type: "string"
+        subtitle:
+          type: "string"
+    
+    WebPushRegisterDeviceRequest:
+      type: "object"
+      description: "The request body to to register a device for web push notification"
+      required:
+        - "userId"
+        - "accountId"
+      properties:
+        userId:
+          type: "string"
+          format: "uuid"
+        accountId:
+          type: "string"
+          format: "uuid"
+        endpoints:
+          type: "string"
+        auth:
+          type: "string"
+        p256dh:
+          type: "string"
+
+    WebPushRegisterDeviceResponse:
+      type: "object"
+      description: "Register device for web push notification response data"     
+      properties:
+        registrationId:
+          type: "string"
+        accountId:
+          type: "string"
+          format: "uuid"
+        userId:
+          type: "string"
+
+    WebPushUnregisterDeviceRequest:
+      type: "object"
+      description: "The request body to unregister a device for web push notification"
+      required:
+        - "endpoints"
+      properties:
+        accountId:
+          type: "string"
+          format: "uuid"
+        endpoints:
+          type: "string"
+    
+    RegisterDeviceRequest:
+      type: "object"
+      description: "The request body to to register a device for notification"
+      required:
+        - "token"
+        - "userId"
+        - "accountId"
+      properties:
+        userId:
+          type: "string"
+          format: "uuid"
+        accountId:
+          type: "string"
+          format: "uuid"
+        token:
+          type: "string"
+
+    RegisterDeviceResponse:
+      type: "object"
+      description: "Register device for push notification response data"     
+      properties:
+        registrationId:
+          type: "string"
+        userId:
+          type: "string"
+        token:
+          type: "string"
+
+    UnregisterDeviceRequest:
+      type: "object"
+      description: "The request body to unregister a device for app push notification"
+      required:
+        - "token"
+      properties:
+        token:
+          type: "string"
+        userId:
+          type: "string"
+          format: "uuid"
+
+    SendPushRequest:
+      type: "object"
+      description: "The request body to send push notification"
+      required:
+        - "userId"
+        - "accountId"
+        - "title"
+        - "body"
+      properties:
+        body:
+          type: "string"
+        userId:
+          type: "string"
+          format: "uuid"
+        accountId:
+          type: "string"
+          format: "uuid"
+        title:
+          type: "string"
+        subtitle:
+          type: "string"
+
+    SendPushResponse:
+      type: "object"
+      description: "Response after sending push notification"     
+      properties:
+        success:
+          type: "boolean"
+        message:
+          type: "string"
+        userId:
+          type: "string"
+          format: "uuid"
+        title:
+          type: "string"
+        body:
+          type: "string"
+        subtitle:
+          type: "string"
+
+    StatusDto:
+      description: "Status data, check additional message field."
+      type: "object"
+      required:
+        - "success"
+      properties:
+        success:
+          description: "Status can be successful or failed, a value of true indicates success."
+          type: "boolean"
+          example: true
+        message:
+          type: "string"
+          description: "Additional message describing status."
+        data:
+          type: "object"
+          additionalProperties: true
+          description: "Data associated with the status, this will not always be present"
+        error:
+          $ref: '#/components/schemas/ErrorMessageDto'
+
+    Metadata:
+      type: "object"
+      description: "Metadata object, for extending properties of an object."
+      required:
+        - "name"
+        - "value"
+      properties:
+        name:
+          type: "string"
+          description: "name of metadata"
+          example: "meta_name"
+        value:
+          type: "string"
+          description: "any value to represent"
+
+    UUID:
+      type: "string"
+      format: "uuid"
+      example: "3a5aaea8-504a-4404-ad3d-b82574fba5e5"
+      description: "General format for UUID"
+
+    Timestamp:
+      type: "string"
+      format: "date-time"
+      description: "Timestamp field."
+
+    PositiveInteger:
+      minimum: 0
+      type: "integer"
+      format: "int32"
+      description: "Positive integer"
+
+    PositiveDouble:
+      minimum: 0
+      type: "number"
+      description: "Positive double"
+
+    Paging:
+      description: "Base object for paginated list"
+      type: "object"
+      properties:
+        name:
+          type: "string"
+          description: "Descriptive name for the list"
+        size:
+          minimum: 1
+          type: "integer"
+          format: "int32"
+          description: "Total number of items in the current page"
+        totalItems:
+          minimum: 0
+          type: "integer"
+          format: "int32"
+          description: "Total number of items that matches the request"
+        nextPage:
+          $ref: '#/components/schemas/PositiveInteger'
+        previousPage:
+          $ref: '#/components/schemas/PositiveInteger'
+        pageCount:
+          minimum: 1
+          type: "integer"
+          format: "int32"
+          description: "Total number of pages available"
+        page:
+          minimum: 1
+          type: "integer"
+          format: "int32"
+          description: "Current page returned"
+        limit:
+          minimum: 1
+          type: "integer"
+          format: "int32"
+          description: "Maximum items to be returned per page"
+      discriminator:
+        propertyName: "name"
+    
+    NotificationStatusObject:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        requestId:
+          type: string
+          format: uuid
+        provider:
+          type: string
+        status:
+          $ref: '#/components/schemas/NotificationStatus'
+        requestedAt:
+          $ref: '#/components/schemas/Timestamp'
+        sentAt:
+          $ref: '#/components/schemas/Timestamp'
+        deliveredAt:
+          $ref: '#/components/schemas/Timestamp'
+
+    NotificationStatus:
+      type: "string"
+      enum:
+        - PENDING
+        - SENT
+        - READ
+        - DELIVERED
+        - FAILED
+
+  parameters:
+    pageQuery:
+      name: "page"
+      in: "query"
+      description: "Page number of items to return"
+      schema:
+        type: "integer"
+        format: "int32"
+        default: 1
+    limitQuery:
+      name: "limit"
+      in: "query"
+      description: "Number of items to return"
+      schema:
+        type: "integer"
+        format: "int32"
+        default: 10
+
+  responses:
+    StatusResponse:
+      description: "Request status"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/StatusDto"
+          example:
+            success: true
+            message: 'Action completed successfully'
+            data:
+              label: "name of service"
+              expiry: "date"
+
+    NotificationStatusResponse:
+      description: "Notification request status"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/NotificationStatusObject"
+
+    HealthResponse:
+      description: "Health Response"
+      content:
+        application/json:
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "string"
+                description: "Status can of the service."
+                example: "UP"
+
+    InvalidRequest:
+      description: "Request could not be validated"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorMessageDto"
+          example:
+            code: 'BAD_REQUEST'
+            message: 'Request could not be validated.'
+
+    Unauthorized:
+      description: "Client is not authorized to make request"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorMessageDto"
+          example:
+            code: 'UNAUTHORIZED'
+            message: 'Either client security header is missing or it is not valid.'
+
+    NotFound:
+      description: "Entity was not found"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorMessageDto"
+          example:
+            code: 'NOT_FOUND'
+            message: 'Information could not be found'
+
+    ConflictError:
+      description: "Entity already exist while user tries to create it."
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorMessageDto"
+          example:
+            code: 'ACCESS_DENIED'
+            message: 'Entity already exist!'
+
+    AccessDenied:
+      description: "Expected permission is not available."
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorMessageDto"
+          example:
+            code: 'ACCESS_DENIED'
+            message: 'Expected permission or scope is not present.'
+
+    UnprocessableError:
+      description: "Entity could not be processed."
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorMessageDto"
+          example:
+            code: 'UNPROCESSABLE'
+            message: 'Sorry we could not process your request'
+
+    ServerError:
+      description: "Internal Server Error"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorMessageDto"
+          example:
+            code: 'INTERNAL_ERROR'
+            message: 'An internal server error occurred.'
+
+    ServiceUnavailableError:
+      description: "Service Unavailable Error"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorMessageDto"
+          example:
+            code: 'UNAVAILABLE_ERROR'
+            message: 'Service unavailable at the moment. Please try again later'
+  
+  securitySchemes:
+    authToken:
+      type: "apiKey"
+      name: "x-auth-token"
+      in: "header"
+      description: "Auth Token header for inter-service communication"
+    basicAuth:
+      type: "http"
+      scheme: "basic"
+    apiKey:
+      type: "apiKey"
+      name: "x-api-key"
+      in: "header"
+      description: "Auth Token header external communication"
+    bearerToken:
+      type: "http"
+      scheme: "bearer"
+      bearerFormat: "JWT"
+      description: "Authentication for user-facing endpoints. Uses Bearer in API prefix."

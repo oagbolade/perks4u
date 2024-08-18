@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "resolveJsonModule": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "baseUrl": "./",
+    "paths": {
+      "@config/*": [ "./src/config/*"],
+      "@controllers/*": ["./src/controllers/*"],
+      "@services/*": ["./src/services/*"],
+      "@middlewares/*": ["./src/middlewares/*"],
+      "@routes/*": ["./src/routes/*"]
+    }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}

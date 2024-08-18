@@ -1,0 +1,6 @@
+# See https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+*   @samuelOyegbemi
+
+spec/**   @samuelOyegbemi @oagbolade @jamesobed
+src/**   @samuelOyegbemi @oagbolade @jamesobed
+tests/**   @samuelOyegbemi @oagbolade @jamesobed

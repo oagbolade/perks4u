@@ -1,0 +1,53 @@
+{
+  "name": "@perksforu/notification-service",
+  "version": "1.0.0",
+  "description": "Notification Service For PerksForU",
+  "main": "./dist/index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "clean": "rm -fr dist",
+    "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/index.ts",
+    "build": "npm run clean && tsc && tsc-alias",
+    "start": "node ./dist",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "test": "jest"
+  },
+  "author": "Samuel Oyegbemi <tech@perksforung.com>",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@perksforu/eslint-config": "^1.0.0-beta-2305212204",
+    "@types/express": "^4.17.13",
+    "@types/jest": "^29.5.2",
+    "@types/node": "^17.0.8",
+    "@types/redis-mock": "^0.17.1",
+    "@types/supertest": "^2.0.11",
+    "jest": "^29.5.0",
+    "nodemon": "^3.0.1",
+    "prettier": "^2.6.2",
+    "redis-mock": "^0.56.3",
+    "supertest": "^6.1.6",
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.4.0",
+    "tsc-alias": "^1.8.5",
+    "tsconfig-paths": "^4.2.0",
+    "tsconfig-paths-jest": "^0.0.1",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "@perksforu/app-core": "^1.0.0-beta-2308202101",
+    "@perksforu/auth-verifier": "^1.0.0-beta-2307051800",
+    "@perksforu/core-notification-api-client": "^1.0.1-SNAPSHOT.169867298",
+    "@perksforu/pubsub-sdk": "^1.0.0-beta-2309081922",
+    "@perksforu/response": "^1.0.0-beta-2307081602",
+    "@perksforu/service-authenticator": "^1.0.0-beta-2307052050",
+    "@sendgrid/mail": "^7.7.0",
+    "express": "^4.17.1",
+    "firebase-admin": "^11.11.0",
+    "mongoose": "7.5.0",
+    "typedi": "^0.10.0",
+    "web-push": "^3.6.6"
+  }
+}

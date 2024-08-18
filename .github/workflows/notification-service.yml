@@ -1,0 +1,38 @@
+name: Build Notification Service
+
+# Controls when the workflow will run
+on:
+  push: {}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.15.0"
+          cache: "npm"
+
+      - name: Configure NPM Auth
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PACKAGE_TOKEN }}
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=$GITHUB_TOKEN" >> $HOME/.npmrc
+          echo "@perksforu:registry=https://npm.pkg.github.com/PerksForU" >> $HOME/.npmrc
+      - name: Install Modules
+        run: |
+          npm install && rm -f $HOME/.npmrc
+      - name: Run Lint
+        run: |
+          npm run lint
+      - name: Run Test
+        run: |
+          npm run test
+      - name: Run Build
+        run: |
+          npm run build
